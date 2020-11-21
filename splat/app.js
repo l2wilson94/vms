@@ -228,9 +228,9 @@ function Layout(state) {
 function Row(els, index) {
   function handleClick(args) {
     // console.log('apply rules on', args)
-    if (!state.playing) {
+   // if (!state.playing) {
       emit(emitter, 'setElement', args)
-    }
+   // }
   }
   return h(
     'div', { class: 'row' },
