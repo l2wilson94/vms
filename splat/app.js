@@ -5,20 +5,18 @@ let state = {
   grid: grid,
   interval: 0,
   playing: false,
-  selectedElement: 'e',
-  editingElement: 'e',
+  selectedElement: 'f',
+  editingElement: 'f',
 }
 
 on(emitter, 'render', function(e) {
   render('#app', Layout(e.detail))
 })
-on(emitter, 'updateGrid', function(e) {
-  let state = e.detail
+const updateGrid = () => {
   render('#grid', state.grid.map(Row))
-})
+}
 
-on(emitter, 'applyRules', function(e) {
-  let [ x, y ] = e.detail
+const applyRules = (x, y) => {
   let element = state.grid[y][x]
   for (let i = 0; i < element.rules.length; i++) {
     let rule = element.rules[i]
@@ -28,8 +26,8 @@ on(emitter, 'applyRules', function(e) {
       break
     }
   }
-  emit(emitter, 'updateGrid', state)
-})
+  updateGrid()
+}
 on(emitter, 'selectElement', function(e) {
   console.log('select element', e.detail)
   state.selectedElement = e.detail
@@ -41,6 +39,7 @@ on(emitter, 'editElement', function(e) {
   emit(emitter, 'render', state)
 })
 on(emitter, 'setElement', function(e) {
+  //console.log(state.selectedElement)
   let [ x, y ] = e.detail
   state.grid[y][x] = state.elements[state.selectedElement]
   emit(emitter, 'render', state)
@@ -79,8 +78,8 @@ on(emitter, 'setYolo', () => {
 })
 on(emitter, 'play', () => {
   state.playing = true
-  clearInterval(state.interval)
-  state.interval = setInterval(() => {
+  //clearInterval(state.interval)
+  /*state.interval = setInterval(() => {
     emit(
       emitter,
       'applyRules',
@@ -89,12 +88,12 @@ on(emitter, 'play', () => {
         1 + parseInt(Math.random()*(GRID_WIDTH-2))
       ]
     )
-  }, 10)
+  }, 10)*/
   emit(emitter, 'render', state)
 })
 on(emitter, 'stop', () => {
   state.playing = false
-  clearInterval(state.interval)
+  //clearInterval(state.interval)
   emit(emitter, 'render', state)
 })
 
@@ -202,7 +201,7 @@ function Layout(state) {
       h(
         'div', {},
         h('h2', {}, 'Controls:'),
-        controls,
+        //controls,
         gridEl,
       ),
       h(
@@ -227,10 +226,7 @@ function Layout(state) {
 
 function Row(els, index) {
   function handleClick(args) {
-    // console.log('apply rules on', args)
-   // if (!state.playing) {
-      emit(emitter, 'setElement', args)
-   // }
+    emit(emitter, 'setElement', args)
   }
   return h(
     'div', { class: 'row' },
@@ -243,10 +239,10 @@ function Row(els, index) {
         click: () => handleClick([i, index]),
         style: style
       }
-      if (i === 0) props.disabled = 'disabled'
+      /*if (i === 0) props.disabled = 'disabled'
       if (i === GRID_HEIGHT-1) props.disabled = 'disabled'
       if (index === 0) props.disabled = 'disabled'
-      if (index === GRID_WIDTH-1) props.disabled = 'disabled'
+      if (index === GRID_WIDTH-1) props.disabled = 'disabled'*/
       return h(
         'button',
         props,
@@ -307,4 +303,24 @@ function setYolo(grid) {
 
 window.onload = function() {
   emit(emitter, 'render', state)
+  
+  /*************************/
+  /**/ //javascriptGoBrr() /**/ 
+  /*************************/
+  
+}
+
+
+const BRR_COUNT = 100
+const javascriptGoBrr = () => {
+	
+	for (let i = 0; i < BRR_COUNT; i++) {
+		const x = 1 + Math.floor(Math.random()*(GRID_WIDTH-2))
+		const y = 1 + Math.floor(Math.random()*(GRID_HEIGHT-2))
+		applyRules(x, y)
+	}
+	
+	console.log("brr")
+	
+	requestAnimationFrame(javascriptGoBrr)
 }
