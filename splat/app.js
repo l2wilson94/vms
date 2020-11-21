@@ -236,7 +236,10 @@ function Row(els, index) {
         style = `color: #eee; background: ${el.color}`
       }
       let props = {
-        click: () => handleClick([i, index]),
+        click: () => {
+			state.grid[index][i] = state.elements[state.selectedElement]
+			//updateGrid()
+		},
         style: style
       }
       /*if (i === 0) props.disabled = 'disabled'
@@ -305,7 +308,7 @@ window.onload = function() {
   emit(emitter, 'render', state)
   
   /*************************/
-  /**/ //javascriptGoBrr() /**/ 
+  /**/ javascriptGoBrr() /**/ 
   /*************************/
   
 }
@@ -320,7 +323,8 @@ const javascriptGoBrr = () => {
 		applyRules(x, y)
 	}
 	
-	console.log("brr")
+	
+	//console.log("brr")
 	
 	requestAnimationFrame(javascriptGoBrr)
 }

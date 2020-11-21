@@ -28,7 +28,7 @@ function Rule({ when = [[]], then = [[]] }) {
 
   this.match = function(grid, x, y) {
     let element = grid[y][x]
-    console.log('element', element)
+    //console.log('element', element)
     // console.log('will try to match rule', this.when)
     let matching = true
     for (let _y = 0; _y < 3; _y++) {
